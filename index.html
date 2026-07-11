@@ -1,0 +1,1198 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="day-mint">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JB's Passwords — Gestor de contraseñas</title>
+  <link rel="manifest" href="./manifest.json">
+  <meta name="theme-color" content="#0d8c54">
+  <meta name="mobile-web-app-capable" content="yes">
+  <link rel="icon" type="image/png" sizes="32x32" href="./favicon-32.png">
+  <link rel="apple-touch-icon" href="./apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="JB's Passwords">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css">
+  <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+  <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ═══════════════════════════════════════════════════════════
+       JB'S VAULT — Sistema de temas
+       NOCHE: verde-oscuro (default) / verde-medio / azul-slate
+       DÍA:   verde-menta / azul-cielo
+    ═══════════════════════════════════════════════════════════ */
+
+    /* ── NOCHE: Verde oscuro (default) ───────────────────────── */
+    :root,
+    [data-theme="night-green"] {
+      --bg:        #071410;
+      --surface:   #0f2218;
+      --surface2:  #182e22;
+      --border:    rgba(74,217,154,0.18);
+      --border-hi: rgba(74,217,154,0.36);
+      --text:      #d8f5e8;
+      --text2:     #7dbb9e;
+      --muted:     #3d7a5e;
+      --accent:    #22c07a;
+      --accent-lo: rgba(34,192,122,0.14);
+      --accent-hi: #4ad99a;
+      --accent2:   #2ecc8f;
+      --danger:    #ff6b6b;
+      --danger-lo: rgba(255,107,107,0.13);
+      --success:   #4ad99a;
+      --success-lo:rgba(74,217,154,0.13);
+      --radius:    13px;
+      --radius-sm: 9px;
+      --mono:      'JetBrains Mono', monospace;
+      --sans:      'Inter', sans-serif;
+      --display:   'Space Grotesk', 'Inter', sans-serif;
+      --shadow:    0 12px 44px rgba(0,0,0,0.55);
+      --signature: linear-gradient(135deg, #0d8c54 0%, #22c07a 45%, #4ad99a 100%);
+      --sig2:      linear-gradient(135deg, #22c07a 0%, #2ecc8f 100%);
+      --surface-top-highlight: rgba(74,217,154,0.07);
+      --glow:      0 0 40px rgba(34,192,122,0.18);
+    }
+
+    /* ── NOCHE: Verde medio ───────────────────────────────────── */
+    [data-theme="night-teal"] {
+      --bg:        #0a1f18;
+      --surface:   #14302a;
+      --surface2:  #1c3e33;
+      --border:    rgba(110,231,183,0.18);
+      --border-hi: rgba(110,231,183,0.36);
+      --text:      #ccf0e0;
+      --text2:     #72b89a;
+      --muted:     #3a6e55;
+      --accent:    #34d399;
+      --accent-lo: rgba(52,211,153,0.14);
+      --accent-hi: #6ee7b7;
+      --accent2:   #22c07a;
+      --danger:    #fc8181;
+      --danger-lo: rgba(252,129,129,0.13);
+      --success:   #6ee7b7;
+      --success-lo:rgba(110,231,183,0.13);
+      --radius:    13px; --radius-sm: 9px;
+      --mono: 'JetBrains Mono', monospace; --sans: 'Inter', sans-serif; --display: 'Space Grotesk', 'Inter', sans-serif;
+      --shadow:    0 12px 44px rgba(0,0,0,0.5);
+      --signature: linear-gradient(135deg, #1a9e70 0%, #34d399 50%, #6ee7b7 100%);
+      --sig2:      linear-gradient(135deg, #34d399 0%, #6ee7b7 100%);
+      --surface-top-highlight: rgba(110,231,183,0.06);
+      --glow:      0 0 40px rgba(52,211,153,0.16);
+    }
+
+    /* ── NOCHE: Azul slate ────────────────────────────────────── */
+    [data-theme="night-blue"] {
+      --bg:        #06091a;
+      --surface:   #10182e;
+      --surface2:  #192540;
+      --border:    rgba(122,170,255,0.18);
+      --border-hi: rgba(122,170,255,0.36);
+      --text:      #d8e8ff;
+      --text2:     #7898cc;
+      --muted:     #3a5080;
+      --accent:    #4d8aff;
+      --accent-lo: rgba(77,138,255,0.14);
+      --accent-hi: #7aaaff;
+      --accent2:   #5b6bff;
+      --danger:    #ff6b8a;
+      --danger-lo: rgba(255,107,138,0.13);
+      --success:   #34d399;
+      --success-lo:rgba(52,211,153,0.13);
+      --radius:    13px; --radius-sm: 9px;
+      --mono: 'JetBrains Mono', monospace; --sans: 'Inter', sans-serif; --display: 'Space Grotesk', 'Inter', sans-serif;
+      --shadow:    0 12px 44px rgba(0,0,0,0.55);
+      --signature: linear-gradient(135deg, #2255cc 0%, #4d8aff 50%, #7aaaff 100%);
+      --sig2:      linear-gradient(135deg, #4d8aff 0%, #7aaaff 100%);
+      --surface-top-highlight: rgba(122,170,255,0.06);
+      --glow:      0 0 40px rgba(77,138,255,0.18);
+    }
+
+    /* ── DÍA: Verde menta ────────────────────────────────────── */
+    [data-theme="day-mint"] {
+      --bg:        #d4eee0;
+      --surface:   #f0fbf5;
+      --surface2:  #c8e8d4;
+      --border:    rgba(10,158,110,0.20);
+      --border-hi: rgba(10,158,110,0.40);
+      --text:      #0a2218;
+      --text2:     #256644;
+      --muted:     #68a888;
+      --accent:    #0a9e6e;
+      --accent-lo: rgba(10,158,110,0.10);
+      --accent-hi: #15b87f;
+      --accent2:   #0d8a8a;
+      --danger:    #cc3050;
+      --danger-lo: rgba(204,48,80,0.09);
+      --success:   #0a9e6e;
+      --success-lo:rgba(10,158,110,0.10);
+      --radius:    13px; --radius-sm: 9px;
+      --mono: 'JetBrains Mono', monospace; --sans: 'Inter', sans-serif; --display: 'Space Grotesk', 'Inter', sans-serif;
+      --shadow:    0 6px 28px rgba(0,60,40,0.12);
+      --signature: linear-gradient(135deg, #0a9e6e 0%, #15b87f 50%, #2ed8a8 100%);
+      --sig2:      linear-gradient(135deg, #0a9e6e 0%, #0d8a8a 100%);
+      --surface-top-highlight: rgba(10,158,110,0.05);
+      --glow:      0 0 30px rgba(10,158,110,0.14);
+    }
+
+    /* ── DÍA: Azul cielo ─────────────────────────────────────── */
+    [data-theme="day-blue"] {
+      --bg:        #d0dff8;
+      --surface:   #f0f6ff;
+      --surface2:  #c4d4f2;
+      --border:    rgba(50,100,220,0.18);
+      --border-hi: rgba(50,100,220,0.36);
+      --text:      #0a1630;
+      --text2:     #2a4880;
+      --muted:     #6888b8;
+      --accent:    #2a6eff;
+      --accent-lo: rgba(42,110,255,0.10);
+      --accent-hi: #5a90ff;
+      --accent2:   #1a50d8;
+      --danger:    #cc2840;
+      --danger-lo: rgba(204,40,64,0.09);
+      --success:   #1ea878;
+      --success-lo:rgba(30,168,120,0.10);
+      --radius:    13px; --radius-sm: 9px;
+      --mono: 'JetBrains Mono', monospace; --sans: 'Inter', sans-serif; --display: 'Space Grotesk', 'Inter', sans-serif;
+      --shadow:    0 6px 28px rgba(0,20,80,0.12);
+      --signature: linear-gradient(135deg, #1a50d8 0%, #2a6eff 50%, #5a90ff 100%);
+      --sig2:      linear-gradient(135deg, #2a6eff 0%, #5a90ff 100%);
+      --surface-top-highlight: rgba(42,110,255,0.05);
+      --glow:      0 0 30px rgba(42,110,255,0.14);
+    }
+
+    /* ═══ BASE ════════════════════════════════════════════════ */
+    body {
+      font-family: var(--sans);
+      font-size: 1rem;
+      background: var(--bg);
+      background-image:
+        radial-gradient(ellipse 80% 55% at 10% -5%, var(--accent-lo), transparent 55%),
+        radial-gradient(ellipse 60% 40% at 90% 100%, rgba(0,0,0,0.08), transparent 50%),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.022'/%3E%3C/svg%3E");
+      background-attachment: fixed;
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.6;
+      transition: background-color 0.4s, color 0.3s;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    /* ═══ LAYOUT ═════════════════════════════════════════════ */
+    .app-shell { max-width: 700px; margin: 0 auto; padding: 28px 20px 60px; }
+
+    /* ═══ HEADER ═════════════════════════════════════════════ */
+    .app-header {
+      display: flex; align-items: center; gap: 16px;
+      margin-bottom: 30px; flex-wrap: wrap;
+    }
+    .app-logo {
+      display: flex; align-items: center; gap: 13px;
+      font-family: var(--display); font-size: 1.28rem; font-weight: 700;
+      letter-spacing: -0.4px; color: var(--text); margin-right: auto;
+    }
+    /* Dial mark — the JB Vault signature element */
+    .logo-icon {
+      width: 46px; height: 46px; position: relative; flex-shrink: 0;
+      border-radius: 14px; background: var(--signature);
+      display: grid; place-items: center;
+      box-shadow:
+        0 1px 0 rgba(255,255,255,0.28) inset,
+        0 -8px 16px rgba(0,0,0,0.2) inset,
+        var(--glow);
+      transition: transform 0.4s cubic-bezier(.2,.8,.2,1), box-shadow 0.4s;
+    }
+    .logo-icon::before {
+      content: ''; position: absolute; inset: 6px; border-radius: 50%;
+      border: 1.5px dashed rgba(255,255,255,0.55);
+      transition: transform 0.65s cubic-bezier(.2,.8,.2,1);
+    }
+    .logo-icon::after {
+      content: ''; position: absolute; inset: 12px; border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+    .logo-icon i { color: #fff; font-size: 1.1rem; position: relative; z-index: 1; filter: drop-shadow(0 1px 3px rgba(0,0,0,0.3)); }
+    .app-logo:hover .logo-icon { transform: rotate(-5deg) scale(1.06); box-shadow: 0 1px 0 rgba(255,255,255,0.3) inset, 0 -8px 16px rgba(0,0,0,0.2) inset, var(--glow), 0 10px 28px -6px var(--accent-lo); }
+    .app-logo:hover .logo-icon::before { transform: rotate(120deg); }
+    .logo-name-sub { font-size: 0.62rem; font-weight: 500; color: var(--muted); letter-spacing: 1.5px; text-transform: uppercase; display: block; margin-top: -3px; }
+
+    /* ═══ THEME SWITCHER ══════════════════════════════════════ */
+    .theme-switcher {
+      display: flex; align-items: center; gap: 6px;
+      background: var(--surface); border: 1px solid var(--border-hi);
+      border-radius: 999px; padding: 5px 8px;
+      box-shadow: 0 1px 0 var(--surface-top-highlight) inset;
+    }
+    .theme-mode-label {
+      font-size: 0.68rem; font-weight: 700; font-family: var(--display);
+      color: var(--muted); text-transform: uppercase; letter-spacing: 1px;
+      padding: 0 4px;
+    }
+    .theme-sep { width: 1px; height: 16px; background: var(--border-hi); margin: 0 2px; }
+    .theme-dot {
+      width: 20px; height: 20px; border-radius: 50%; cursor: pointer; flex-shrink: 0;
+      border: 2px solid transparent;
+      transition: transform 0.25s cubic-bezier(.2,.8,.2,1), border-color 0.15s, box-shadow 0.15s;
+      position: relative;
+    }
+    .theme-dot:hover { transform: scale(1.28) rotate(8deg); }
+    .theme-dot.active { border-color: var(--text); box-shadow: 0 0 0 1.5px var(--bg); }
+    .theme-dot[data-t="night-green"] { background: linear-gradient(135deg, #0d8c54, #22c07a); }
+    .theme-dot[data-t="night-teal"]  { background: linear-gradient(135deg, #1a9e70, #34d399); }
+    .theme-dot[data-t="night-blue"]  { background: linear-gradient(135deg, #2255cc, #4d8aff); }
+    .theme-dot[data-t="day-mint"]    { background: linear-gradient(135deg, #a8dfc4, #0a9e6e); }
+    .theme-dot[data-t="day-blue"]    { background: linear-gradient(135deg, #a0c8f8, #2a6eff); }
+
+    /* ═══ BUTTONS ════════════════════════════════════════════ */
+    .btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 9px 18px; border-radius: var(--radius-sm);
+      border: 1px solid transparent;
+      font-family: var(--display); font-size: 0.88rem; font-weight: 600;
+      cursor: pointer; transition: all 0.18s cubic-bezier(.2,.8,.2,1);
+      white-space: nowrap; touch-action: manipulation; letter-spacing: 0.1px;
+    }
+    .btn-primary {
+      background: var(--signature); color: #fff;
+      box-shadow: 0 1px 0 rgba(255,255,255,0.22) inset, var(--glow);
+    }
+    .btn-primary:hover { filter: brightness(1.1); transform: translateY(-1px); box-shadow: 0 6px 18px -3px var(--accent-lo), 0 1px 0 rgba(255,255,255,0.22) inset; }
+    .btn-ghost { background: transparent; color: var(--text2); border-color: var(--border-hi); }
+    .btn-ghost:hover { background: var(--surface2); color: var(--text); border-color: var(--accent); }
+    .btn-danger { background: var(--danger-lo); color: var(--danger); border-color: transparent; }
+    .btn-danger:hover { background: var(--danger); color: #fff; }
+    .btn-icon {
+      width: 36px; height: 36px; padding: 0; justify-content: center;
+      background: var(--surface2); color: var(--text2); border: 1px solid var(--border-hi);
+    }
+    .btn-icon:hover { background: var(--accent-lo); color: var(--accent-hi); border-color: var(--accent); }
+    .btn-sm { padding: 6px 12px; font-size: 0.8rem; }
+    button:focus-visible { outline: 2.5px solid var(--accent-hi); outline-offset: 2px; border-radius: 6px; }
+
+    /* ═══ VAULT LOCK SCREEN ══════════════════════════════════ */
+    .vault-screen {
+      display: flex; flex-direction: column; align-items: center;
+      text-align: center; padding: 50px 20px; gap: 20px;
+    }
+    .vault-shield {
+      width: 96px; height: 96px; background: var(--signature);
+      border-radius: 26px; display: grid; place-items: center;
+      font-size: 2.5rem; color: #fff;
+      box-shadow:
+        0 1px 0 rgba(255,255,255,0.28) inset,
+        0 -12px 20px rgba(0,0,0,0.18) inset,
+        var(--glow), 0 16px 50px -10px var(--accent-lo);
+      animation: vaultBreathe 4s ease-in-out infinite;
+    }
+    @keyframes vaultBreathe {
+      0%,100% { transform: scale(1); }
+      50%      { transform: scale(1.04); }
+    }
+    .vault-screen h2 {
+      font-family: var(--display); font-size: 1.7rem; font-weight: 700;
+      letter-spacing: -0.5px; color: var(--text);
+      background: var(--signature); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .vault-screen p { color: var(--text2); font-size: 0.9rem; max-width: 360px; }
+    .vault-input-row { display: flex; gap: 10px; width: 100%; max-width: 420px; }
+    .vault-input-row input {
+      flex: 1; background: var(--surface); border: 1.5px solid var(--border-hi);
+      border-radius: var(--radius-sm); padding: 12px 16px;
+      color: var(--text); font-family: var(--mono); font-size: 0.9rem;
+      outline: none; transition: border-color 0.15s, box-shadow 0.15s;
+      box-shadow: 0 1px 0 var(--surface-top-highlight) inset;
+    }
+    .vault-input-row input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-lo), 0 1px 0 var(--surface-top-highlight) inset; }
+    #vault-setup-hint { font-size: 0.78rem; color: var(--muted); }
+
+    /* ═══ VAULT OPEN ═════════════════════════════════════════ */
+    #vault-open { display: none; }
+    .vault-topbar { display: flex; align-items: center; gap: 10px; margin-bottom: 22px; flex-wrap: wrap; }
+    .vault-topbar-title {
+      font-family: var(--display); font-size: 0.88rem; font-weight: 600;
+      color: var(--success); margin-right: auto; display: flex; align-items: center; gap: 6px;
+    }
+
+    /* ═══ CREATE TRIGGER ═════════════════════════════════════ */
+    .create-trigger {
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      width: 100%; padding: 15px 22px; margin-bottom: 18px;
+      background: var(--surface); border: 1.5px dashed var(--border-hi);
+      border-radius: var(--radius); cursor: pointer;
+      color: var(--text2); font-family: var(--display); font-size: 0.92rem; font-weight: 600;
+      transition: all 0.2s cubic-bezier(.2,.8,.2,1);
+      box-shadow: 0 1px 0 var(--surface-top-highlight) inset;
+    }
+    .create-trigger:hover { border-color: var(--accent); border-style: solid; color: var(--text); background: var(--accent-lo); box-shadow: 0 4px 14px -4px var(--accent-lo), 0 1px 0 var(--surface-top-highlight) inset; }
+    .create-trigger i.main-icon { font-size: 1.15rem; color: var(--accent-hi); }
+    .create-trigger.open { border-style: solid; border-color: var(--accent); background: var(--accent-lo); color: var(--text); border-bottom-left-radius: 0; border-bottom-right-radius: 0; margin-bottom: 0; }
+    .chevron { margin-left: auto; transition: transform 0.25s cubic-bezier(.2,.8,.2,1); font-size: 1rem; color: var(--muted); }
+    .create-trigger.open .chevron { transform: rotate(180deg); color: var(--accent-hi); }
+
+    /* ═══ FORM PANEL ══════════════════════════════════════════ */
+    .collapsible-wrap { max-height: 0; overflow: hidden; transition: max-height 0.38s cubic-bezier(.2,.8,.2,1); }
+    .collapsible-wrap.open { max-height: 800px; }
+    .collapsible-wrap .form-panel { border-top-left-radius: 0; border-top-right-radius: 0; border-top: none; margin-bottom: 22px; }
+    .form-panel {
+      background: var(--surface); border: 1.5px solid var(--border-hi);
+      border-radius: var(--radius); padding: 22px;
+      box-shadow: 0 1px 0 var(--surface-top-highlight) inset;
+    }
+    .form-title { font-family: var(--display); font-size: 0.74rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 1.6px; margin-bottom: 18px; }
+    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 14px; margin-bottom: 16px; }
+    .field { display: flex; flex-direction: column; gap: 6px; }
+    .field label { font-size: 0.72rem; font-weight: 700; color: var(--text2); text-transform: uppercase; letter-spacing: 0.6px; font-family: var(--display); }
+    .field input, .field textarea, .field select {
+      background: var(--surface2); border: 1.5px solid var(--border-hi);
+      border-radius: var(--radius-sm); padding: 10px 13px;
+      color: var(--text); font-family: var(--sans); font-size: 0.9rem;
+      outline: none; transition: border-color 0.15s, box-shadow 0.15s; width: 100%;
+    }
+    .field input:focus, .field textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-lo); background: var(--surface); }
+    .field textarea { resize: vertical; min-height: 60px; }
+    .form-footer { display: flex; align-items: center; justify-content: flex-end; gap: 8px; flex-wrap: wrap; margin-top: 6px; }
+
+    /* ═══ PASSWORD FIELDS ════════════════════════════════════ */
+    .pass-field-wrap { position: relative; }
+    .pass-field-wrap input { padding-right: 86px; font-family: var(--mono); font-size: 0.9rem; letter-spacing: 0.5px; }
+    .pass-actions { position: absolute; right: 6px; top: 50%; transform: translateY(-50%); display: flex; gap: 3px; }
+    .pass-actions button { width: 33px; height: 29px; padding: 0; display: grid; place-items: center; background: var(--surface); border: 1px solid var(--border-hi); border-radius: 7px; cursor: pointer; color: var(--text2); font-size: 0.9rem; transition: all 0.15s; }
+    .pass-actions button:hover { background: var(--accent-lo); color: var(--accent-hi); border-color: var(--accent); }
+    .strength-bar { height: 3px; background: var(--border-hi); border-radius: 2px; margin-top: 6px; overflow: hidden; }
+    .strength-fill { height: 100%; width: 0; border-radius: 2px; transition: width 0.3s, background 0.3s; }
+
+    /* ═══ SEARCH ═════════════════════════════════════════════ */
+    .search-row { display: flex; gap: 8px; margin-bottom: 16px; }
+    .search-wrap { position: relative; flex: 1; }
+    .search-wrap i { position: absolute; left: 13px; top: 50%; transform: translateY(-50%); color: var(--muted); pointer-events: none; }
+    .search-input { width: 100%; background: var(--surface); border: 1.5px solid var(--border-hi); border-radius: var(--radius-sm); padding: 10px 13px 10px 38px; color: var(--text); font-family: var(--sans); font-size: 0.9rem; outline: none; transition: border-color 0.15s, box-shadow 0.15s; }
+    .search-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-lo); }
+
+    /* ═══ CARDS ══════════════════════════════════════════════ */
+    .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 16px; }
+    .card {
+      background: var(--surface); border: 1.5px solid var(--border-hi);
+      border-radius: var(--radius); padding: 20px;
+      display: flex; flex-direction: column; gap: 13px;
+      transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s cubic-bezier(.2,.8,.2,1);
+      box-shadow: 0 1px 0 var(--surface-top-highlight) inset;
+      animation: cardIn 0.3s cubic-bezier(.2,.8,.2,1) both;
+    }
+    @keyframes cardIn { from { opacity:0; transform:translateY(8px) scale(0.98); } to { opacity:1; transform:none; } }
+    .card.card-removing { animation: cardOut 0.22s ease both; pointer-events: none; }
+    @keyframes cardOut { from { opacity:1; } to { opacity:0; transform:scale(0.92); } }
+    .card:hover { border-color: var(--accent); box-shadow: var(--shadow), var(--glow), 0 1px 0 var(--surface-top-highlight) inset; transform: translateY(-3px); }
+    .card-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+    .card-icon-title { display: flex; align-items: center; gap: 12px; }
+    .card-favicon {
+      width: 44px; height: 44px; border-radius: 12px; flex-shrink: 0;
+      background: var(--signature);
+      display: grid; place-items: center;
+      font-size: 1.15rem; color: #fff; font-weight: 700;
+      font-family: var(--mono);
+      box-shadow: 0 1px 0 rgba(255,255,255,0.28) inset, 0 4px 12px -3px var(--accent-lo);
+    }
+    .card-title { font-family: var(--display); font-size: 1rem; font-weight: 700; color: var(--text); line-height: 1.3; }
+    .card-subtitle { font-size: 0.7rem; color: var(--muted); font-family: var(--mono); margin-top: 2px; }
+    .card-actions { display: flex; gap: 5px; flex-shrink: 0; }
+    .card-body { font-size: 0.88rem; color: var(--text2); }
+    .pass-row { display: flex; align-items: center; gap: 7px; }
+    .pass-display { font-family: var(--mono); font-size: 0.85rem; color: var(--text2); flex: 1; word-break: break-all; }
+    .pass-mask { letter-spacing: 2px; }
+    .card-obs { font-size: 0.8rem; color: var(--muted); font-style: italic; margin-top: 4px; }
+
+    /* ═══ EMPTY STATE ════════════════════════════════════════ */
+    .empty-state { text-align: center; padding: 70px 20px; grid-column: 1/-1; }
+    .empty-state i { font-size: 2.4rem; display: grid; place-items: center; width: 70px; height: 70px; margin: 0 auto 16px; border-radius: 50%; background: var(--surface2); color: var(--accent-hi); opacity: 0.8; }
+    .empty-state p { font-family: var(--display); font-size: 0.95rem; font-weight: 500; color: var(--text2); }
+
+    /* ═══ IMPORT BANNER ══════════════════════════════════════ */
+    .transfer-banner {
+      display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+      background: var(--surface); border: 1.5px solid var(--border-hi);
+      border-radius: var(--radius); padding: 16px 20px; margin-top: 24px;
+      width: 100%; max-width: 480px;
+      box-shadow: 0 1px 0 var(--surface-top-highlight) inset;
+    }
+    .transfer-banner-text { flex: 1; min-width: 160px; }
+    .transfer-banner-title { font-family: var(--display); font-size: 0.9rem; font-weight: 600; color: var(--text); }
+    .transfer-banner-sub { font-size: 0.78rem; color: var(--muted); margin-top: 3px; }
+    .file-btn-wrap { position: relative; overflow: hidden; }
+    .file-btn-wrap input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+
+    /* ═══ MODALS ══════════════════════════════════════════════ */
+    .modal-backdrop { display: none; place-items: center; position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); z-index: 100; padding: 20px; }
+    .modal-backdrop.open { display: grid; }
+    .modal {
+      background: var(--surface); border: 1.5px solid var(--border-hi);
+      border-radius: 18px; padding: 30px; width: min(520px, 100%);
+      box-shadow: var(--shadow), var(--glow), 0 1px 0 var(--surface-top-highlight) inset;
+      animation: popIn 0.25s cubic-bezier(.2,.8,.2,1);
+      max-height: 90vh; overflow-y: auto;
+    }
+    @keyframes popIn { from { opacity:0; transform:scale(0.95) translateY(6px); } to { opacity:1; transform:none; } }
+    .modal-title { font-family: var(--display); font-size: 1.15rem; font-weight: 700; margin-bottom: 22px; display: flex; align-items: center; gap: 10px; color: var(--text); }
+    .modal-title i { color: var(--accent-hi); }
+    .modal-footer { display: flex; justify-content: flex-end; gap: 8px; margin-top: 22px; flex-wrap: wrap; }
+
+    /* confirm */
+    .confirm-icon { width: 58px; height: 58px; border-radius: 16px; background: var(--danger-lo); color: var(--danger); display: grid; place-items: center; font-size: 1.7rem; margin: 0 auto 16px; }
+
+    /* ═══ GENERATOR ══════════════════════════════════════════ */
+    .gen-options { display: flex; flex-wrap: wrap; gap: 12px; margin: 16px 0; }
+    .gen-option { display: flex; align-items: center; gap: 7px; font-size: 0.88rem; cursor: pointer; color: var(--text2); user-select: none; }
+    .gen-option input { accent-color: var(--accent); width: 15px; height: 15px; cursor: pointer; }
+    .gen-pass-display { font-family: var(--mono); font-size: 1rem; background: var(--surface2); border: 1.5px solid var(--border-hi); border-radius: var(--radius-sm); padding: 16px; word-break: break-all; color: var(--text); letter-spacing: 1px; min-height: 60px; }
+    .gen-len-row { display: flex; align-items: center; gap: 12px; font-size: 0.85rem; color: var(--text2); margin-top: 14px; }
+    .gen-len-row input[type=range] { flex: 1; accent-color: var(--accent); }
+
+    /* ═══ TOASTS ══════════════════════════════════════════════ */
+    #toast-container { position: fixed; bottom: 22px; right: 22px; display: flex; flex-direction: column; gap: 9px; z-index: 999; }
+    .toast { display: flex; align-items: center; gap: 10px; padding: 13px 18px; background: var(--surface2); backdrop-filter: blur(10px); border: 1.5px solid var(--border-hi); border-radius: var(--radius); font-size: 0.88rem; font-weight: 500; box-shadow: var(--shadow); animation: slideIn 0.3s cubic-bezier(.2,.8,.2,1); max-width: 340px; color: var(--text); }
+    @keyframes slideIn { from { opacity:0; transform:translateX(20px); } to { opacity:1; transform:none; } }
+    .toast-success i { color: var(--success); }
+    .toast-error   i { color: var(--danger); }
+    .toast-info    i { color: var(--accent-hi); }
+
+    /* ═══ SCROLLBAR ═══════════════════════════════════════════ */
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 3px; opacity: 0.4; }
+
+    /* ═══ RESPONSIVE ══════════════════════════════════════════ */
+    @media (max-width: 540px) {
+      .app-shell { padding: 14px 12px 40px; }
+      .cards-grid { grid-template-columns: 1fr; }
+      .vault-input-row { flex-direction: column; }
+      .vault-screen h2 { font-size: 1.4rem; }
+      .app-header { gap: 10px; }
+      .theme-switcher { padding: 4px 6px; }
+      .theme-mode-label { display: none; }
+    }
+
+    /* ═══ ACCESSIBILITY ═══════════════════════════════════════ */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="app-shell">
+
+  <!-- HEADER -->
+  <header class="app-header">
+    <div class="app-logo">
+      <div class="logo-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 6a3.2 3.2 0 0 0-3.2 3.2v1.6H8a1 1 0 0 0-1 1v5.6a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-5.6a1 1 0 0 0-1-1h-.8V9.2A3.2 3.2 0 0 0 12 6zm0 1.8a1.4 1.4 0 0 1 1.4 1.4v1.6h-2.8V9.2A1.4 1.4 0 0 1 12 7.8z" fill="#fff"/></svg></div>
+      <div>
+        <span>JB's Passwords</span>
+        <span class="logo-name-sub">Gestor de contraseñas</span>
+      </div>
+    </div>
+
+    <!-- THEME SWITCHER -->
+    <div class="theme-switcher">
+      <span class="theme-mode-label">Noche</span>
+      <div class="theme-dot active" data-t="night-green" title="Verde oscuro" onclick="setTheme('night-green')"></div>
+      <div class="theme-dot"        data-t="night-teal"  title="Verde medio"  onclick="setTheme('night-teal')"></div>
+      <div class="theme-dot"        data-t="night-blue"  title="Azul slate"   onclick="setTheme('night-blue')"></div>
+      <div class="theme-sep"></div>
+      <span class="theme-mode-label">Día</span>
+      <div class="theme-dot"        data-t="day-mint"    title="Menta día"    onclick="setTheme('day-mint')"></div>
+      <div class="theme-dot"        data-t="day-blue"    title="Azul día"     onclick="setTheme('day-blue')"></div>
+    </div>
+
+    <button class="btn btn-ghost btn-sm" onclick="exportVaultData()" title="Exportar backup">
+      <i class="ph-bold ph-export"></i> Exportar
+    </button>
+    <button class="btn btn-ghost btn-sm" onclick="document.getElementById('header-import-input').click()" title="Importar backup">
+      <i class="ph-bold ph-file-arrow-up"></i> Importar
+    </button>
+    <input type="file" id="header-import-input" accept=".json" style="display:none" onchange="confirmImportVaultData(this)">
+  </header>
+
+  <!-- LOCK SCREEN -->
+  <div class="vault-screen" id="vault-lock">
+    <div class="vault-shield" id="vault-shield-icon"><svg id="vault-shield-glyph" width="42" height="42" viewBox="0 0 24 24" fill="none"><path d="M12 6a3.2 3.2 0 0 0-3.2 3.2v1.6H8a1 1 0 0 0-1 1v5.6a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-5.6a1 1 0 0 0-1-1h-.8V9.2A3.2 3.2 0 0 0 12 6zm0 1.8a1.4 1.4 0 0 1 1.4 1.4v1.6h-2.8V9.2A1.4 1.4 0 0 1 12 7.8z" fill="#fff"/></svg></div>
+    <h2>JB's Passwords</h2>
+    <p id="vault-setup-hint">Introduce tu clave maestra para acceder a las credenciales.</p>
+    <style>
+      #vault-shield-icon{ position:relative; }
+      #vault-shield-icon::after{
+        content:''; position:absolute; inset:-6px; border-radius:32px;
+        border:1.5px dashed var(--border-hi); opacity:.5;
+        animation: shieldRing 6s linear infinite;
+      }
+      @keyframes shieldRing{ to{ transform:rotate(360deg); } }
+      #vault-shield-glyph.unlocking{ animation: glyphPop .5s cubic-bezier(.2,.8,.2,1); }
+      @keyframes glyphPop{ 0%{transform:scale(1) rotate(0);} 40%{transform:scale(1.3) rotate(-14deg);} 100%{transform:scale(1) rotate(0);} }
+    </style>
+    <div class="vault-input-row">
+      <input type="password" id="master-input" placeholder="Clave maestra…"
+             onkeydown="if(event.key==='Enter') unlockVault()">
+      <button class="btn btn-primary" onclick="unlockVault()">
+        <i class="ph-bold ph-lock-open"></i> Abrir
+      </button>
+    </div>
+    <span id="vault-setup-hint2" style="font-size:0.78rem;color:var(--muted);">
+      Primera vez: escribe la clave que quieras — se guardará automáticamente.
+    </span>
+
+    <!-- IMPORT BANNER (visible only when no vault exists) -->
+    <div class="transfer-banner" id="import-banner" style="margin-top:24px;width:100%;max-width:460px;">
+      <div class="transfer-banner-text">
+        <div class="transfer-banner-title"><i class="ph-bold ph-download-simple"></i> Importar credenciales</div>
+        <div class="transfer-banner-sub">¿Ya tienes credenciales en el senhas.html? Importa el archivo exportado desde allí.</div>
+      </div>
+      <div class="file-btn-wrap">
+        <button class="btn btn-ghost btn-sm"><i class="ph-bold ph-file-arrow-up"></i> Cargar .json</button>
+        <input type="file" accept=".json" onchange="importVaultData(this)">
+      </div>
+    </div>
+  </div>
+
+  <!-- VAULT OPEN -->
+  <div id="vault-open">
+
+    <!-- TOP BAR -->
+    <div class="vault-topbar">
+      <span class="vault-topbar-title"><i class="ph-bold ph-lock-open" style="color:var(--success);"></i> Passwords desbloqueado</span>
+      <button class="btn btn-ghost btn-sm" onclick="openModal('modal-change-key')">
+        <i class="ph-bold ph-key-return"></i> Cambiar clave
+      </button>
+      <button class="btn btn-ghost btn-sm" onclick="lockVault()">
+        <i class="ph-bold ph-lock"></i> Bloquear
+      </button>
+    </div>
+
+    <!-- NEW CREDENTIAL FORM -->
+    <button class="create-trigger" id="trigger-cred" onclick="toggleCreatePanel()">
+      <i class="ph-bold ph-plus-circle"></i> Nueva credencial
+      <i class="ph-bold ph-caret-down chevron"></i>
+    </button>
+    <div class="collapsible-wrap" id="panel-cred">
+      <div class="form-panel">
+        <div class="form-title">Añadir credencial</div>
+        <div class="form-grid">
+          <div class="field">
+            <label>Servicio / Sitio</label>
+            <input id="v-site" type="text" placeholder="Netflix, Gmail, banco…" autocomplete="off">
+          </div>
+          <div class="field">
+            <label>Usuario / Email</label>
+            <input id="v-user" type="text" placeholder="usuario@email.com" autocomplete="off">
+          </div>
+          <div class="field" style="grid-column:1/-1;">
+            <label>Contraseña</label>
+            <div class="pass-field-wrap">
+              <input id="v-pass" type="password" placeholder="••••••••"
+                     autocomplete="new-password" oninput="updateStrength(this.value)">
+              <div class="pass-actions">
+                <button onclick="togglePassVis('v-pass',this)" title="Ver/Ocultar"><i class="ph ph-eye"></i></button>
+                <button onclick="openGenerator()" title="Generar contraseña"><i class="ph ph-dice-five"></i></button>
+              </div>
+            </div>
+            <div class="strength-bar"><div class="strength-fill" id="str-fill"></div></div>
+          </div>
+          <div class="field" style="grid-column:1/-1;">
+            <label>Observaciones (URL, PIN, notas…)</label>
+            <textarea id="v-obs" placeholder="Opcional" rows="2"></textarea>
+          </div>
+        </div>
+        <div class="form-footer">
+          <button class="btn btn-primary" onclick="saveCredential()">
+            <i class="ph-bold ph-key"></i> Guardar credencial
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SEARCH -->
+    <div class="search-row">
+      <div class="search-wrap">
+        <i class="ph ph-magnifying-glass"></i>
+        <input class="search-input" id="search-vault" type="text"
+               placeholder="Buscar por sitio o usuario…" oninput="renderVault()">
+      </div>
+      <button class="btn btn-ghost" onclick="exportVaultData()" title="Exportar credenciales">
+        <i class="ph-bold ph-export"></i>
+      </button>
+    </div>
+
+    <!-- CARDS -->
+    <div class="cards-grid" id="vault-grid"></div>
+  </div>
+
+</div>
+
+<!-- TOAST CONTAINER -->
+<div id="toast-container"></div>
+
+<!-- MODAL: editar credencial -->
+<div class="modal-backdrop" id="modal-cred">
+  <div class="modal">
+    <div class="modal-title"><i class="ph-bold ph-pencil"></i> Editar credencial</div>
+    <input type="hidden" id="edit-cred-id">
+    <div class="form-grid">
+      <div class="field">
+        <label>Servicio / Sitio</label>
+        <input id="edit-cred-site" type="text" autocomplete="off">
+      </div>
+      <div class="field">
+        <label>Usuario / Email</label>
+        <input id="edit-cred-user" type="text" autocomplete="off">
+      </div>
+      <div class="field" style="grid-column:1/-1;">
+        <label>Contraseña</label>
+        <div class="pass-field-wrap">
+          <input id="edit-cred-pass" type="password" autocomplete="new-password">
+          <div class="pass-actions">
+            <button onclick="togglePassVis('edit-cred-pass',this)" title="Ver/Ocultar"><i class="ph ph-eye"></i></button>
+            <button onclick="openGenerator()" title="Generar contraseña"><i class="ph ph-dice-five"></i></button>
+          </div>
+        </div>
+      </div>
+      <div class="field" style="grid-column:1/-1;">
+        <label>Observaciones</label>
+        <textarea id="edit-cred-obs" rows="2"></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-cred')">Cancelar</button>
+      <button class="btn btn-primary" onclick="updateCredential()">
+        <i class="ph-bold ph-check"></i> Guardar cambios
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: cambiar clave maestra -->
+<div class="modal-backdrop" id="modal-change-key">
+  <div class="modal" style="max-width:440px;">
+    <div class="modal-title"><i class="ph-bold ph-key-return"></i> Cambiar clave maestra</div>
+    <p style="font-size:0.85rem;color:var(--text2);margin-bottom:18px;">
+      Descifra con la clave actual y vuelve a cifrar con la nueva.
+    </p>
+    <div class="field" style="margin-bottom:12px;">
+      <label>Clave actual</label>
+      <div class="pass-field-wrap">
+        <input id="ck-current" type="password" placeholder="Clave actual…">
+        <div class="pass-actions"><button onclick="togglePassVis('ck-current',this)"><i class="ph ph-eye"></i></button></div>
+      </div>
+    </div>
+    <div class="field" style="margin-bottom:12px;">
+      <label>Nueva clave</label>
+      <div class="pass-field-wrap">
+        <input id="ck-new" type="password" placeholder="Nueva clave…">
+        <div class="pass-actions"><button onclick="togglePassVis('ck-new',this)"><i class="ph ph-eye"></i></button></div>
+      </div>
+    </div>
+    <div class="field" style="margin-bottom:4px;">
+      <label>Confirmar nueva clave</label>
+      <div class="pass-field-wrap">
+        <input id="ck-confirm" type="password" placeholder="Confirmar nueva clave…">
+        <div class="pass-actions"><button onclick="togglePassVis('ck-confirm',this)"><i class="ph ph-eye"></i></button></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-change-key');clearChangeKeyForm()">Cancelar</button>
+      <button class="btn btn-primary" onclick="changeVaultKey()">
+        <i class="ph-bold ph-key"></i> Cambiar clave
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: generador de contraseñas -->
+<div class="modal-backdrop" id="modal-gen">
+  <div class="modal" style="max-width:460px;">
+    <div class="modal-title"><i class="ph-bold ph-dice-five"></i> Generar contraseña segura</div>
+    <div class="gen-pass-display" id="gen-pass-display">–</div>
+    <div class="gen-len-row" style="margin-top:14px;">
+      <span>Longitud:</span>
+      <input type="range" id="gen-len" min="8" max="40" value="20" oninput="document.getElementById('gen-len-val').textContent=this.value;generatePassword()">
+      <span id="gen-len-val">20</span>
+    </div>
+    <div class="gen-options">
+      <label class="gen-option"><input type="checkbox" id="gen-upper" checked onchange="generatePassword()"> Mayúsculas</label>
+      <label class="gen-option"><input type="checkbox" id="gen-lower" checked onchange="generatePassword()"> Minúsculas</label>
+      <label class="gen-option"><input type="checkbox" id="gen-num"   checked onchange="generatePassword()"> Números</label>
+      <label class="gen-option"><input type="checkbox" id="gen-sym"   checked onchange="generatePassword()"> Símbolos</label>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-gen')">Cancelar</button>
+      <button class="btn btn-ghost" onclick="generatePassword()"><i class="ph-bold ph-arrows-clockwise"></i> Regenerar</button>
+      <button class="btn btn-primary" onclick="useGeneratedPassword()">
+        <i class="ph-bold ph-check"></i> Usar esta
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: confirmar eliminar -->
+<div class="modal-backdrop" id="modal-confirm">
+  <div class="modal" style="max-width:380px;text-align:center;">
+    <div style="display:flex;flex-direction:column;align-items:center;">
+      <div class="confirm-icon"><i class="ph-bold ph-trash"></i></div>
+      <div class="modal-title" style="margin-bottom:8px;" id="confirm-title">¿Eliminar esta credencial?</div>
+      <p style="font-size:0.85rem;color:var(--text2);" id="confirm-text">Esta acción no se puede deshacer.</p>
+    </div>
+    <div class="modal-footer" style="justify-content:center;margin-top:20px;">
+      <button class="btn btn-ghost" onclick="closeModal('modal-confirm')" style="flex:1;justify-content:center;">Cancelar</button>
+      <button class="btn btn-danger" id="confirm-btn" style="flex:1;justify-content:center;">
+        <i class="ph-bold ph-trash"></i> Eliminar
+      </button>
+    </div>
+  </div>
+</div>
+
+
+<script>
+'use strict';
+
+// ── THEME ─────────────────────────────────────────────────
+const THEMES = ['night-green','night-teal','night-blue','day-mint','day-blue'];
+
+function setTheme(t) {
+  if (!THEMES.includes(t)) t = 'night-green';
+  document.documentElement.setAttribute('data-theme', t);
+  localStorage.setItem('jbvault_theme', t);
+  document.querySelectorAll('.theme-dot').forEach(d => d.classList.toggle('active', d.dataset.t === t));
+}
+
+function applyTheme(t) { setTheme(t || localStorage.getItem('jbvault_theme') || 'day-mint'); }
+
+// ── STATE ─────────────────────────────────────────────────
+let vaultKey      = null;
+let vaultUnlocked = false;
+let _genTargetField = null;
+let _audioCtx     = null;
+
+// ── INIT ──────────────────────────────────────────────────
+window.addEventListener('load', () => {
+  applyTheme();
+  if (localStorage.getItem('vault_salt')) {
+    document.getElementById('vault-setup-hint').textContent = 'Introduce tu clave maestra para acceder.';
+    document.getElementById('vault-setup-hint2').style.display = 'none';
+    document.getElementById('import-banner').style.display = 'none';
+  }
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') document.querySelectorAll('.modal-backdrop.open').forEach(m => m.classList.remove('open'));
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') { if (vaultUnlocked) saveCredential(); }
+  });
+  document.querySelectorAll('.modal-backdrop').forEach(b => {
+    b.addEventListener('click', e => { if (e.target === b) b.classList.remove('open'); });
+  });
+});
+
+// ── CRYPTO ────────────────────────────────────────────────
+async function deriveKey(password, salt) {
+  const km = await crypto.subtle.importKey('raw', new TextEncoder().encode(password), 'PBKDF2', false, ['deriveKey']);
+  return crypto.subtle.deriveKey({ name:'PBKDF2', salt, iterations:200000, hash:'SHA-256' }, km, { name:'AES-GCM', length:256 }, false, ['encrypt','decrypt']);
+}
+async function encryptData(key, data) {
+  const iv  = crypto.getRandomValues(new Uint8Array(12));
+  const ct  = await crypto.subtle.encrypt({ name:'AES-GCM', iv }, key, new TextEncoder().encode(JSON.stringify(data)));
+  const buf = new Uint8Array(iv.byteLength + ct.byteLength);
+  buf.set(iv, 0); buf.set(new Uint8Array(ct), 12);
+  return btoa(String.fromCharCode(...buf));
+}
+async function decryptData(key, b64) {
+  const buf   = Uint8Array.from(atob(b64), c => c.charCodeAt(0));
+  const plain = await crypto.subtle.decrypt({ name:'AES-GCM', iv: buf.slice(0,12) }, key, buf.slice(12));
+  return JSON.parse(new TextDecoder().decode(plain));
+}
+
+// ── VAULT LOCK / UNLOCK ───────────────────────────────────
+async function unlockVault() {
+  const password = document.getElementById('master-input').value;
+  if (!password) { toast('Escribe tu clave maestra', 'error'); return; }
+  const saltB64 = localStorage.getItem('vault_salt');
+  try {
+    let salt;
+    if (!saltB64) {
+      // First time — create the vault
+      salt = crypto.getRandomValues(new Uint8Array(16));
+      vaultKey = await deriveKey(password, salt);
+      localStorage.setItem('vault_salt', btoa(String.fromCharCode(...salt)));
+      await saveCredentials([]);
+    } else {
+      salt     = Uint8Array.from(atob(saltB64), c => c.charCodeAt(0));
+      vaultKey = await deriveKey(password, salt);
+      await decryptData(vaultKey, localStorage.getItem('vault_data'));
+    }
+    vaultUnlocked = true;
+    const glyph = document.getElementById('vault-shield-glyph');
+    if (glyph) {
+      glyph.classList.add('unlocking');
+      setTimeout(() => glyph.classList.remove('unlocking'), 500);
+    }
+    document.getElementById('master-input').value = '';
+    setTimeout(() => {
+      document.getElementById('vault-lock').style.display  = 'none';
+      document.getElementById('vault-open').style.display  = 'block';
+      renderVault();
+    }, 320);
+    playFeedbackSound('save');
+    toast('Passwords desbloqueado', 'success');
+  } catch {
+    toast('Clave incorrecta', 'error');
+    vaultKey = null;
+  }
+}
+
+function lockVault() {
+  vaultUnlocked = false; vaultKey = null;
+  document.getElementById('vault-lock').style.display = 'flex';
+  document.getElementById('vault-open').style.display = 'none';
+  document.getElementById('master-input').value = '';
+  document.getElementById('vault-grid').innerHTML = '';
+  closeCreatePanel();
+  toast('Vault bloqueado', 'info');
+}
+
+// ── CREDENTIALS CRUD ──────────────────────────────────────
+async function getCredentials() {
+  if (!vaultKey) return [];
+  const raw = localStorage.getItem('vault_data');
+  if (!raw) return [];
+  return decryptData(vaultKey, raw);
+}
+async function saveCredentials(arr) {
+  if (!vaultKey) return;
+  const encrypted = await encryptData(vaultKey, arr);
+  try { localStorage.setItem('vault_data', encrypted); } catch (e) {
+    toast('⚠️ Almacenamiento lleno — elimina credenciales antiguas', 'error', 6000);
+  }
+}
+
+async function saveCredential() {
+  const site = document.getElementById('v-site').value.trim();
+  const user = document.getElementById('v-user').value.trim();
+  const pass = document.getElementById('v-pass').value.trim();
+  const obs  = document.getElementById('v-obs').value.trim();
+  if (!site || !user || !pass) { toast('Servicio, usuario y contraseña son obligatorios', 'error'); return; }
+  const creds = await getCredentials();
+  creds.unshift({ id: Date.now(), site, user, pass, obs, ts: new Date().toLocaleDateString('es-ES') });
+  await saveCredentials(creds);
+  ['v-site','v-user','v-pass','v-obs'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('str-fill').style.width = '0';
+  document.getElementById('v-pass').type = 'password';
+  closeCreatePanel();
+  renderVault();
+  playFeedbackSound('save');
+  toast('Credencial guardada', 'success');
+}
+
+async function renderVault() {
+  if (!vaultUnlocked) return;
+  const q     = document.getElementById('search-vault').value.toLowerCase();
+  const creds = (await getCredentials()).filter(c =>
+    c.site.toLowerCase().includes(q) || c.user.toLowerCase().includes(q) || (c.obs||'').toLowerCase().includes(q)
+  );
+  const grid = document.getElementById('vault-grid');
+  if (!creds.length) {
+    grid.innerHTML = `<div class="empty-state">
+      <i class="ph ph-lock-key"></i>
+      <p>${q ? 'Sin resultados para «' + escHtml(q) + '»' : '¡Añade tu primera credencial!'}</p>
+    </div>`; return;
+  }
+  grid.innerHTML = creds.map(c => `
+    <div class="card" id="cred-card-${c.id}">
+      <div class="card-header">
+        <div class="card-icon-title">
+          <div class="card-favicon">${escHtml(c.site.charAt(0).toUpperCase())}</div>
+          <div>
+            <div class="card-title">${escHtml(c.site)}</div>
+            <div class="card-subtitle">${c.ts || ''}</div>
+          </div>
+        </div>
+        <div class="card-actions">
+          <button class="btn btn-icon btn-sm" onclick="openEditCred(${c.id})" title="Editar"><i class="ph-bold ph-pencil"></i></button>
+          <button class="btn btn-danger btn-sm" onclick="deleteCred(${c.id})" title="Eliminar"><i class="ph-bold ph-trash"></i></button>
+        </div>
+      </div>
+      <div class="card-body">
+        <div style="font-size:0.78rem;color:var(--muted);margin-bottom:7px;font-family:var(--mono);">${escHtml(c.user)}</div>
+        <div class="pass-row">
+          <div class="pass-display pass-mask" id="pd-${c.id}">••••••••••••</div>
+          <button class="btn btn-icon btn-sm" onclick="toggleCardPass(${c.id},'${escAttr(c.pass)}')" title="Ver/Ocultar"><i class="ph ph-eye" id="eye-${c.id}"></i></button>
+          <button class="btn btn-icon btn-sm" onclick="copyToClipboard('${escAttr(c.pass)}','Contraseña')" title="Copiar contraseña"><i class="ph-bold ph-copy"></i></button>
+        </div>
+        ${c.url ? `<div style="margin-top:6px;"><a href="${escAttr(c.url)}" target="_blank" style="font-size:0.78rem;color:var(--accent-hi);">${escHtml(c.url)}</a></div>` : ''}
+        ${c.obs ? `<div class="card-obs" style="margin-top:8px;">${escHtml(c.obs)}</div>` : ''}
+      </div>
+    </div>`).join('');
+}
+
+function toggleCardPass(id, pass) {
+  const disp = document.getElementById(`pd-${id}`);
+  const icon = document.getElementById(`eye-${id}`);
+  if (disp.classList.contains('pass-mask')) {
+    disp.textContent = pass; disp.classList.remove('pass-mask');
+    icon.className = 'ph ph-eye-slash';
+  } else {
+    disp.textContent = '••••••••••••'; disp.classList.add('pass-mask');
+    icon.className = 'ph ph-eye';
+  }
+}
+
+async function openEditCred(id) {
+  const c = (await getCredentials()).find(x => x.id === id); if (!c) return;
+  document.getElementById('edit-cred-id').value   = id;
+  document.getElementById('edit-cred-site').value = c.site;
+  document.getElementById('edit-cred-user').value = c.user;
+  document.getElementById('edit-cred-pass').value = c.pass;
+  document.getElementById('edit-cred-obs').value  = c.obs || '';
+  openModal('modal-cred');
+}
+async function updateCredential() {
+  const id   = +document.getElementById('edit-cred-id').value;
+  const site = document.getElementById('edit-cred-site').value.trim();
+  const user = document.getElementById('edit-cred-user').value.trim();
+  const pass = document.getElementById('edit-cred-pass').value.trim();
+  const obs  = document.getElementById('edit-cred-obs').value.trim();
+  if (!site || !user || !pass) { toast('Campos vacíos', 'error'); return; }
+  await saveCredentials((await getCredentials()).map(c => c.id === id ? {...c, site, user, pass, obs} : c));
+  renderVault(); closeModal('modal-cred'); playFeedbackSound('save'); toast('Credencial actualizada', 'success');
+}
+function deleteCred(id) {
+  confirmDelete('¿Eliminar esta credencial?', 'Esta acción no se puede deshacer.', () => {
+    const el = document.getElementById(`cred-card-${id}`);
+    animateRemoveCard(el, async () => {
+      await saveCredentials((await getCredentials()).filter(c => c.id !== id));
+      renderVault(); toast('Credencial eliminada', 'info');
+    });
+  });
+}
+
+// ── CHANGE KEY ─────────────────────────────────────────────
+async function changeVaultKey() {
+  const current = document.getElementById('ck-current').value;
+  const next    = document.getElementById('ck-new').value;
+  const confirm = document.getElementById('ck-confirm').value;
+  if (!current || !next) { toast('Completa todos los campos', 'error'); return; }
+  if (next !== confirm)  { toast('Las claves nuevas no coinciden', 'error'); return; }
+  if (next.length < 6)   { toast('La clave nueva debe tener al menos 6 caracteres', 'error'); return; }
+  try {
+    const saltB64  = localStorage.getItem('vault_salt');
+    const salt     = Uint8Array.from(atob(saltB64), c => c.charCodeAt(0));
+    const oldKey   = await deriveKey(current, salt);
+    const creds    = await decryptData(oldKey, localStorage.getItem('vault_data'));
+    const newSalt  = crypto.getRandomValues(new Uint8Array(16));
+    const newKey   = await deriveKey(next, newSalt);
+    const encrypted = await encryptData(newKey, creds);
+    localStorage.setItem('vault_salt', btoa(String.fromCharCode(...newSalt)));
+    localStorage.setItem('vault_data', encrypted);
+    vaultKey = newKey;
+    closeModal('modal-change-key'); clearChangeKeyForm();
+    toast('Clave cambiada correctamente', 'success');
+  } catch { toast('Clave actual incorrecta', 'error'); }
+}
+function clearChangeKeyForm() {
+  ['ck-current','ck-new','ck-confirm'].forEach(id => document.getElementById(id).value = '');
+  document.querySelectorAll('#modal-change-key .pass-actions button i').forEach(i => i.className = 'ph ph-eye');
+}
+
+// ── EXPORT / IMPORT vault data ─────────────────────────────
+function exportVaultData() {
+  const salt = localStorage.getItem('vault_salt');
+  const data = localStorage.getItem('vault_data');
+  if (!salt || !data) { toast('No hay nada que exportar todavía', 'error'); return; }
+  const payload = JSON.stringify({ vault_salt: salt, vault_data: data }, null, 2);
+  const blob = new Blob([payload], { type: 'application/json' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href     = url;
+  a.download = 'jb-vault-backup.json';
+  a.click();
+  URL.revokeObjectURL(url);
+  toast('Archivo exportado — guárdalo en un lugar seguro', 'success', 5000);
+}
+
+function confirmImportVaultData(input) {
+  const file = input.files && input.files[0]; if (!file) return;
+  const hasVault = !!localStorage.getItem('vault_salt');
+  if (hasVault) {
+    const ok = confirm('Esto reemplazará TODAS tus credenciales actuales por las del archivo importado. ¿Seguro que quieres continuar?');
+    if (!ok) { input.value = ''; return; }
+  }
+  importVaultData(input);
+}
+
+function importVaultData(input) {
+  const file = input.files && input.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const obj = JSON.parse(e.target.result);
+      if (!obj.vault_salt || !obj.vault_data) throw new Error('formato inválido');
+      localStorage.setItem('vault_salt', obj.vault_salt);
+      localStorage.setItem('vault_data', obj.vault_data);
+      toast('Datos importados — ahora introduce tu clave maestra para abrir el vault', 'success', 4000);
+      setTimeout(() => location.reload(), 1200);
+    } catch { toast('Archivo no válido — asegúrate de usar un export de JB Vault\'s', 'error', 5000); }
+  };
+  reader.readAsText(file);
+  input.value = '';
+}
+
+// ── CREATE TRIGGER ─────────────────────────────────────────
+function toggleCreatePanel() {
+  const panel = document.getElementById('panel-cred');
+  const btn   = document.getElementById('trigger-cred');
+  const open  = panel.classList.toggle('open');
+  btn.classList.toggle('open', open);
+  const icon = btn.querySelector('i:first-child');
+  if (icon) icon.className = open ? 'ph-bold ph-x-circle' : 'ph-bold ph-plus-circle';
+  if (open) setTimeout(() => document.getElementById('v-site').focus(), 360);
+}
+function closeCreatePanel() {
+  const panel = document.getElementById('panel-cred');
+  const btn   = document.getElementById('trigger-cred');
+  panel.classList.remove('open');
+  btn.classList.remove('open');
+  const icon = btn.querySelector('i:first-child');
+  if (icon) icon.className = 'ph-bold ph-plus-circle';
+}
+
+// ── PASSWORD TOOLS ─────────────────────────────────────────
+function togglePassVis(inputId, btn) {
+  const input = document.getElementById(inputId);
+  const icon  = btn.querySelector('i');
+  if (input.type === 'password') {
+    input.type = 'text'; if (icon) icon.className = 'ph ph-eye-slash';
+  } else {
+    input.type = 'password'; if (icon) icon.className = 'ph ph-eye';
+  }
+}
+function updateStrength(val) {
+  const fill = document.getElementById('str-fill');
+  let score = 0;
+  if (val.length >= 8)  score++;
+  if (val.length >= 12) score++;
+  if (/[A-Z]/.test(val)) score++;
+  if (/[0-9]/.test(val)) score++;
+  if (/[^A-Za-z0-9]/.test(val)) score++;
+  const colors = ['#ff4d6d','#ff9a3c','#f5c842','#2ecc8f','#00c9a7'];
+  fill.style.width     = (score / 5 * 100) + '%';
+  fill.style.background = colors[score - 1] || '#ff4d6d';
+}
+function openGenerator() { generatePassword(); openModal('modal-gen'); }
+function generatePassword() {
+  const upper  = document.getElementById('gen-upper').checked;
+  const lower  = document.getElementById('gen-lower').checked;
+  const num    = document.getElementById('gen-num').checked;
+  const sym    = document.getElementById('gen-sym').checked;
+  const len    = +document.getElementById('gen-len').value;
+  let chars = '';
+  if (upper) chars += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  if (lower) chars += 'abcdefghijklmnopqrstuvwxyz';
+  if (num)   chars += '0123456789';
+  if (sym)   chars += '!@#$%^&*()-_=+[]{}|;:,.?';
+  if (!chars) { toast('Selecciona al menos un tipo de carácter', 'error'); return; }
+  const arr = crypto.getRandomValues(new Uint32Array(len));
+  const pass = Array.from(arr).map(n => chars[n % chars.length]).join('');
+  document.getElementById('gen-pass-display').textContent = pass;
+}
+function useGeneratedPassword() {
+  const pass = document.getElementById('gen-pass-display').textContent;
+  if (pass === '–') { generatePassword(); return; }
+  // Fill whichever password field is most relevant (edit if modal-cred is open, else new cred)
+  const targetId = document.getElementById('modal-cred').classList.contains('open') ? 'edit-cred-pass' : 'v-pass';
+  const input    = document.getElementById(targetId);
+  input.value    = pass;
+  input.type     = 'text';
+  const icon = input.parentElement.querySelector('.pass-actions button i');
+  if (icon) icon.className = 'ph ph-eye-slash';
+  updateStrength(pass);
+  closeModal('modal-gen');
+  toast('Contraseña copiada al campo', 'success');
+}
+
+// ── CLIPBOARD ──────────────────────────────────────────────
+async function copyToClipboard(text, label = 'Copiado') {
+  try {
+    await navigator.clipboard.writeText(text);
+    toast(label + ' copiado al portapapeles', 'success');
+  } catch {
+    const ta = document.createElement('textarea');
+    ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    toast(label + ' copiado', 'success');
+  }
+}
+
+// ── CONFIRM DELETE ─────────────────────────────────────────
+function confirmDelete(title, text, onConfirm) {
+  document.getElementById('confirm-title').textContent = title;
+  document.getElementById('confirm-text').textContent  = text;
+  const btn = document.getElementById('confirm-btn');
+  const newBtn = btn.cloneNode(true);
+  btn.parentNode.replaceChild(newBtn, btn);
+  newBtn.addEventListener('click', () => { closeModal('modal-confirm'); onConfirm(); });
+  openModal('modal-confirm');
+}
+function animateRemoveCard(el, cb) {
+  if (!el) { cb(); return; }
+  el.classList.add('card-removing');
+  setTimeout(cb, 220);
+}
+
+// ── MODALS ─────────────────────────────────────────────────
+function openModal(id)  { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+// ── TOAST ──────────────────────────────────────────────────
+function toast(msg, type = 'info', dur = 3000) {
+  const icons = { success:'ph-check-circle', error:'ph-warning-circle', info:'ph-info' };
+  const el = document.createElement('div');
+  el.className = `toast toast-${type}`;
+  el.innerHTML = `<i class="ph-bold ${icons[type]}"></i> ${msg}`;
+  document.getElementById('toast-container').appendChild(el);
+  setTimeout(() => { el.style.opacity = '0'; el.style.transition = 'opacity 0.3s'; setTimeout(() => el.remove(), 300); }, dur);
+}
+
+// ── FEEDBACK SOUND ─────────────────────────────────────────
+function _getAudioCtx() {
+  if (!_audioCtx) _audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return _audioCtx;
+}
+function playFeedbackSound(type = 'save') {
+  try {
+    const ctx = _getAudioCtx();
+    if (ctx.state === 'suspended') ctx.resume();
+    const t = ctx.currentTime;
+    const osc  = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.value = type === 'done' ? 660 : 760;
+    gain.gain.setValueAtTime(0.001, t);
+    gain.gain.exponentialRampToValueAtTime(0.14, t + 0.015);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.13);
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.start(t); osc.stop(t + 0.13);
+  } catch { /* ignore */ }
+}
+
+// ── HELPERS ────────────────────────────────────────────────
+function escHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function escAttr(s) { return String(s).replace(/\\/g,'\\\\').replace(/'/g,"\\'"); }
+
+// ── PWA: registrar service worker (necesario para que se instale con el icono correcto) ──
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js').catch(() => {});
+  });
+}
+</script>
+</body>
+</html>
